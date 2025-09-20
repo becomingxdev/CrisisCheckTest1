@@ -1,3 +1,4 @@
+
 "use client"
 
 import { ProtectedRoute } from "@/components/protected-route"
@@ -6,16 +7,39 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { VolunteerManagement } from "@/components/admin/volunteer-management"
 import { CrisisReports } from "@/components/admin/crisis-reports"
 import { SiteSettings } from "@/components/admin/site-settings"
-import { Users, AlertTriangle, Settings, BarChart3 } from "lucide-react"
+import { Users, AlertTriangle, Settings, BarChart3, LogOut, Home } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
+import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 export default function AdminPage() {
+  const { logout } = useAuth()
+  const router = useRouter()
+
+  const handleLogout = () => {
+    logout()
+    router.push("/login")
+  }
+
   return (
     <ProtectedRoute requiredRole="admin">
       <div className="min-h-screen bg-slate-50">
         <div className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
-            <p className="text-slate-600 mt-2">Manage volunteers, crisis reports, and site settings</p>
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
+              <p className="text-slate-600 mt-2">Manage volunteers, crisis reports, and site settings</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <Button variant="outline" size="sm" onClick={() => router.push("/")}>
+                <Home className="mr-2 h-4 w-4" />
+                Back to Public Dashboard
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </Button>
+            </div>
           </div>
 
           {/* Stats Overview */}
